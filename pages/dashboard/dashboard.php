@@ -1,6 +1,6 @@
 <?php
-require "webservices/connection.php";
-include "constant/Constant.php";
+require "../../webservices/connection.php";
+include "../../constant/Constant.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,9 +17,18 @@ include "constant/Constant.php";
     <div class="container-fluid">
         <div class="row">
             <?php
-            include "partials/sidebar.php";
-            include "pages/dashboard/dashboard.php";
+            include "../../partials/sidebar.php";
             ?>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex align-items-center py-3 border-bottom">
+                    <h5 class="mb-0">Dashboard</h5>
+                </div>
+
+                <div class="pt-3">
+                    <h3>Welcome!</h3>
+                    <p>This is your dashboard content.</p>
+                </div>
+            </main>
         </div>
     </div>
 </body>
