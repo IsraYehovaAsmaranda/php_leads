@@ -2,8 +2,8 @@
 require "../../webservices/connection.php";
 include "../../constant/Constant.php";
 
-$queryGetAllLeads = "SELECT * FROM leads";
-$getAllLeads = $conn->query("SELECT * FROM leads");
+$queryGetAllLeads = "SELECT * FROM leads INNER JOIN sales ON leads.id_sales = sales.id_sales INNER JOIN produk ON leads.id_produk = produk.id_produk";
+$getAllLeads = $conn->query($queryGetAllLeads);
 $leads = [];
 while ($row = $getAllLeads->fetch_assoc()) {
     $leads[] = $row;
@@ -32,6 +32,21 @@ while ($row = $getAllLeads->fetch_assoc()) {
                 </div>
 
                 <div class="pt-3">
+                    <?php
+                    if (isset($_SESSION["success"])) {
+                        ?>
+                        <div class="alert alert-success" role="alert">
+                            <?= $_SESSION["success"] ?>
+                        </div>
+                        <?php
+                    } else if (isset($_SESSION["error"])) {
+                        ?>
+                            <div class="alert alert-danger" role="alert">
+                            <?= $_SESSION["error"] ?>
+                            </div>
+                        <?php
+                    }
+                    ?>
                     <a class="btn btn-primary mb-3" href="<?= "$baseURL/pages/leads/tambah-leads.php" ?>" role="
                         button">Tambah Leads</a>
 
@@ -39,8 +54,13 @@ while ($row = $getAllLeads->fetch_assoc()) {
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Id Leads</th>
-                                <th scope="col">Nama Leads</th>
+                                <th scope="col">Id Input</th>
+                                <th scope="col">Tanggal</th>
+                                <th scope="col">Sales</th>
+                                <th scope="col">Produk</th>
+                                <th scope="col">Nama Lead</th>
+                                <th scope="col">No Wa</th>
+                                <th scope="col">Kota</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,7 +72,12 @@ while ($row = $getAllLeads->fetch_assoc()) {
                                     <tr>
                                         <td><?= $rowNumber++ ?></td>
                                         <td><?= $row["id_leads"] ?></td>
-                                        <td><?= $row["nama_leads"] ?></td>
+                                        <td><?= $row["tanggal"] ?></td>
+                                        <td><?= $row["nama_sales"] ?></td>
+                                        <td><?= $row["nama_produk"] ?></td>
+                                        <td><?= $row["nama_lead"] ?></td>
+                                        <td><?= $row["no_wa"] ?></td>
+                                        <td><?= $row["kota"] ?></td>
                                     </tr>
                                     <?php
                                 }

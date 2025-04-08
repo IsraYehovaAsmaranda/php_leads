@@ -15,6 +15,34 @@ $produk = [];
 while ($row = $getAllProduk->fetch_assoc()) {
     $produk[] = $row;
 }
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $tanggal = $_POST['tanggal'];
+    $id_sales = $_POST['sales'];
+    $nama_leads = $_POST['namaLeads'];
+    $id_produk = $_POST['produk'];
+    $no_whatsapp = $_POST['noWhatsapp'];
+    $kota = $_POST['kota'];
+    $userId = 1;
+
+    $stmt = $conn->prepare("INSERT INTO leads (tanggal, id_sales, id_produk, no_wa, nama_lead, kota, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+    if ($stmt) {
+        $stmt->bind_param("siisssi", $tanggal, $id_sales, $id_produk, $no_whatsapp, $nama_leads, $kota, $userId);
+
+        if ($stmt->execute()) {
+            $_SESSION["success"] = "Data berhasil disimpan";
+        } else {
+            $_SESSION["error"] = "Data gagal disimpan";
+        }
+
+        $stmt->close();
+    } else {
+        $_SESSION["error"] = "Data gagal disimpan";
+    }
+
+    header("Location: $baseURL/pages/leads/leads.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,7 +115,7 @@ while ($row = $getAllProduk->fetch_assoc()) {
                             </div>
                             <div class="col-4">
                                 <label for="kota">Kota</label>
-                                <input type="text" class="form-control" id="kota" placeholder="Pilih Kota">
+                                <input type="text" class="form-control" name="kota" id="kota" placeholder="Pilih Kota">
                             </div>
                         </div>
                         <div class="d-flex justify-content-center gap-3">
