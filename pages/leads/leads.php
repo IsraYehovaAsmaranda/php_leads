@@ -157,7 +157,7 @@ $bulan = ["Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustu
                                     <tr>
                                         <td><?= $rowNumber++ ?></td>
                                         <td><?= $row["id_leads"] ?></td>
-                                        <td><?= $row["tanggal"] ?></td>
+                                        <td><?= date_format(new DateTime($row["tanggal"]), "d-m-Y") ?></td>
                                         <td><?= $row["nama_sales"] ?></td>
                                         <td><?= $row["nama_produk"] ?></td>
                                         <td><?= $row["nama_lead"] ?></td>
