@@ -73,12 +73,14 @@ $bulan = ["Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustu
                             <?= $_SESSION["success"] ?>
                         </div>
                         <?php
+                        unset( $_SESSION["success"]);
                     } else if (isset($_SESSION["error"])) {
                         ?>
                             <div class="alert alert-danger" role="alert">
                             <?= $_SESSION["error"] ?>
                             </div>
                         <?php
+                        unset( $_SESSION["error"]);
                     }
                     ?>
 
