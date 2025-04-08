@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="col-4">
                                 <label for="sales">Sales</label>
                                 <select class="form-select form-select" name="sales" id="sales" required>
-                                    <option selected>Pilih sales</option>
+                                    <option selected value="">Pilih sales</option>
                                     <?php
                                     foreach ($sales as $row):
                                         ?>
@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="col-4">
                                 <label for="produk">Produk</label>
                                 <select class="form-select form-select" name="produk" id="produk" required>
-                                    <option selected>Pilih Produk</option>
+                                    <option selected value="">Pilih Produk</option>
                                     <?php
                                     foreach ($produk as $row):
                                         ?>

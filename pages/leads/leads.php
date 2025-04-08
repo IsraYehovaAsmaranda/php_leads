@@ -2,12 +2,46 @@
 require "../../webservices/connection.php";
 include "../../constant/Constant.php";
 
-$queryGetAllLeads = "SELECT * FROM leads INNER JOIN sales ON leads.id_sales = sales.id_sales INNER JOIN produk ON leads.id_produk = produk.id_produk";
+$queryGetAllLeads = "SELECT * FROM leads INNER JOIN sales ON leads.id_sales = sales.id_sales INNER JOIN produk ON leads.id_produk = produk.id_produk WHERE YEAR(tanggal) = YEAR(CURDATE())";
+
+if (isset($_GET["produk"]) && $_GET["produk"] != "") {
+    $productId = $_GET['produk'];
+    $queryGetAllLeads .= "AND produk.id_produk = '$productId' ";
+}
+
+if (isset($_GET["sales"]) && $_GET["sales"] != "") {
+    $salesId = $_GET["sales"];
+    $queryGetAllLeads .= "AND sales.id_sales = '$salesId' ";
+}
+
+if (isset($_GET["bulan"]) && $_GET["bulan"] != "") {
+    $idBulan = $_GET["bulan"];
+    $queryGetAllLeads .= "AND MONTH(tanggal) = '$idBulan' ";
+} else {
+    $queryGetAllLeads .= "AND MONTH(tanggal) = MONTH(CURDATE()) ";
+}
+
 $getAllLeads = $conn->query($queryGetAllLeads);
 $leads = [];
 while ($row = $getAllLeads->fetch_assoc()) {
     $leads[] = $row;
 }
+
+$queryGetAllSales = "SELECT * FROM sales";
+$getAllSales = $conn->query($queryGetAllSales);
+$sales = [];
+while ($row = $getAllSales->fetch_assoc()) {
+    $sales[] = $row;
+}
+
+$queryGetAllProduk = "SELECT * FROM produk";
+$getAllProduk = $conn->query($queryGetAllProduk);
+$produk = [];
+while ($row = $getAllProduk->fetch_assoc()) {
+    $produk[] = $row;
+}
+
+$bulan = ["Januari", "Febuari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,6 +81,57 @@ while ($row = $getAllLeads->fetch_assoc()) {
                         <?php
                     }
                     ?>
+
+                    <div class="card mb-3">
+                        <h5 class="card-header">Pencarian</h5>
+                        <div class="card-body">
+                            <form method="get">
+                                <div class="row mb-3">
+                                    <div class="col-4">
+                                        <label for="produk" class="form-label">Produk</label>
+                                        <select class="form-select" name="produk" id="produk">
+                                            <option selected value="">Select one</option>
+                                            <?php
+                                            foreach ($produk as $row):
+                                                ?>
+                                                <option value="<?= $row['id_produk'] ?>"><?= $row["nama_produk"] ?></option>
+                                                <?php
+                                            endforeach;
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="sales" class="form-label">Sales</label>
+                                        <select class="form-select" name="sales" id="sales">
+                                            <option selected value="">Select one</option>
+                                            <?php
+                                            foreach ($sales as $row):
+                                                ?>
+                                                <option value="<?= $row['id_sales'] ?>"><?= $row["nama_sales"] ?></option>
+                                                <?php
+                                            endforeach;
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="bulan" class="form-label">Bulan</label>
+                                        <select class="form-select" name="bulan" id="bulan">
+                                            <option selected value="">Select one</option>
+                                            <?php
+                                            $index = 1;
+                                            foreach ($bulan as $row):
+                                                ?>
+                                                <option value="<?= $index++ ?>"><?= $row ?></option>
+                                                <?php
+                                            endforeach;
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Cari</button>
+                            </form>
+                        </div>
+                    </div>
                     <a class="btn btn-primary mb-3" href="<?= "$baseURL/pages/leads/tambah-leads.php" ?>" role="
                         button">Tambah Leads</a>
 
@@ -84,7 +169,7 @@ while ($row = $getAllLeads->fetch_assoc()) {
                             } else {
                                 ?>
                                 <tr>
-                                    <td colspan="3" class="text-center">Tidak ada leads</td>
+                                    <td colspan="8" class="text-center">Tidak ada leads</td>
                                 </tr>
                                 <?php
                             }
